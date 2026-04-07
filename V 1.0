@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JournalistCast™ v1.0</title>
+  <style>
+    :root {
+      --bg1: #dff5ff;
+      --bg2: #c8ecfb;
+      --panel1: #ffffff;
+      --panel2: #eaf8fe;
+      --border: #b7dfef;
+      --accent: #59c2eb;
+      --accent-dark: #2f8fb8;
+      --text: #123246;
+      --text-soft: #426679;
+      --ok: #2b9d64;
+      --warn: #d58b00;
+      --shadow: 0 10px 28px rgba(18, 50, 70, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, var(--bg1), var(--bg2));
+    }
+
+    .module-shell {
+      width: min(1280px, calc(100% - 28px));
+      margin: 18px auto;
+      background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(234,248,254,0.95));
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 220px 1fr 190px;
+      gap: 14px;
+      align-items: center;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.7);
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+
+    .brand-sub {
+      font-size: 0.82rem;
+      color: var(--text-soft);
+    }
+
+    .ticker-wrap {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: linear-gradient(180deg, #fff, #f4fcff);
+      height: 42px;
+      display: flex;
+      align-items: center;
+    }
+
+    .ticker-label {
+      position: relative;
+      z-index: 2;
+      flex: 0 0 auto;
+      padding: 0 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(180deg, var(--accent), var(--accent-dark));
+      height: 100%;
+      display: flex;
+      align-items: center;
+      border-right: 1px solid rgba(255,255,255,0.35);
+    }
+
+    .ticker-track {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .ticker-items {
+      white-space: nowrap;
+      display: inline-block;
+      padding-left: 100%;
+      animation: tickerMove 34s linear infinite;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    @keyframes tickerMove {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .status-box {
+      text-align: right;
+      font-size: 0.82rem;
+      color: var(--text-soft);
+      line-height: 1.35;
+    }
+
+    .layout {
+      padding: 18px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .grid-2-1 {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 18px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, var(--panel1), var(--panel2));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      min-height: 170px;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .panel-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.8);
+      color: var(--text-soft);
+    }
+
+    .panel-copy {
+      color: var(--text-soft);
+      font-size: 0.92rem;
+      margin: 0 0 14px;
+      line-height: 1.45;
+    }
+
+    .link-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .link-card,
+    .source-link,
+    .action-btn {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.88);
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      cursor: pointer;
+    }
+
+    .link-card:hover,
+    .source-link:hover,
+    .action-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--accent);
+      box-shadow: 0 10px 20px rgba(89, 194, 235, 0.12);
+    }
+
+    .muted {
+      color: var(--text-soft);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .source-col {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.72);
+      padding: 12px;
+    }
+
+    .source-col h4 {
+      margin: 0 0 10px;
+      font-size: 0.94rem;
+    }
+
+    .source-stack {
+      display: grid;
+      gap: 8px;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .footer {
+      padding: 10px 18px 16px;
+      font-size: 0.76rem;
+      color: var(--text-soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .admin-toggle-wrap {
+      padding: 0 18px 18px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .admin-toggle {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, #fff, #ebfaff);
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 800;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .admin-panel {
+      display: none;
+      margin: 0 18px 18px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: linear-gradient(180deg, #ffffff, #eefaff);
+      box-shadow: var(--shadow);
+    }
+
+    .admin-panel.open { display: block; }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .field label {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--text-soft);
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      font: inherit;
+    }
+
+    .field textarea {
+      min-height: 88px;
+      resize: vertical;
+    }
+
+    .admin-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .admin-btn {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      background: white;
+      color: var(--text);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .admin-btn.primary {
+      background: linear-gradient(180deg, var(--accent), var(--accent-dark));
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .admin-note {
+      margin-top: 10px;
+      font-size: 0.82rem;
+      color: var(--text-soft);
+      line-height: 1.45;
+    }
+
+    @media (max-width: 1100px) {
+      .source-grid { grid-template-columns: repeat(2, 1fr); }
+      .grid-3, .grid-2-1, .grid-2, .admin-grid { grid-template-columns: 1fr; }
+      .topbar { grid-template-columns: 1fr; }
+      .status-box { text-align: left; }
+    }
+
+    @media (max-width: 640px) {
+      .module-shell { width: calc(100% - 14px); margin: 7px auto; }
+      .layout, .topbar, .footer, .admin-toggle-wrap { padding-left: 12px; padding-right: 12px; }
+      .source-grid, .quick-actions { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="module-shell" id="journalistCastModule">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brand-title" id="brandTitle">JournalistCast™</div>
+        <div class="brand-sub" id="brandSub">WBN Journalist Command Center</div>
+      </div>
+
+      <div class="ticker-wrap" aria-label="Live ticker">
+        <div class="ticker-label">🔴 LIVE</div>
+        <div class="ticker-track">
+          <div class="ticker-items" id="tickerItems">
+            Training updates live * Style guide refreshed * Morning brief links ready * Ad tools online * Journalist dashboard available *
+          </div>
+        </div>
+      </div>
+
+      <div class="status-box">
+        <div><strong>Status:</strong> <span id="statusText">Ready</span></div>
+        <div><strong>Updated:</strong> <span id="updatedText">04-07-26 8:00 am PST</span></div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="grid-3">
+        <section class="panel">
+          <div class="panel-header">
+            <h3 class="panel-title">🎓 Training + Onboarding</h3>
+            <span class="badge">Daily Use</span>
+          </div>
+          <p class="panel-copy">Fast-start links for new and active WBN journalists. Keep this focused on what gets people productive quickly.</p>
+          <div class="link-list" id="trainingLinks"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <h3 class="panel-title">📘 Style Guide + Standards</h3>
+            <span class="badge">Brand Control</span>
+          </div>
+          <p class="panel-copy">This protects consistency across the network: style, format, source rules, and editorial expectations.</p>
+          <div class="link-list" id="styleLinks"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <h3 class="panel-title">🧠 Journalist Workspace</h3>
+            <span class="badge">Production</span>
+          </div>
+          <p class="panel-copy">Launch the active work environment, draft system, or internal newsroom tools from one place.</p>
+          <div class="link-list" id="workspaceLinks"></div>
+        </section>
+      </div>
+
+      <div class="grid-2-1">
+        <section class="panel">
+          <div class="panel-header">
+            <h3 class="panel-title">🌍 Newspaper + Source Hub</h3>
+            <span class="badge">Signal Access</span>
+          </div>
+          <p class="panel-copy">This is the browser-tab killer. Organize the outlets your journalists check every day by desk or region.</p>
+          <div class="source-grid" id="sourceGrid"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <h3 class="panel-title">🚀 Quick Actions</h3>
+            <span class="badge">Launchpad</span>
+          </div>
+          <p class="panel-copy">Shortcuts for the actions your team repeats every day.</p>
+          <div class="quick-actions" id="quickActions"></div>
+        </section>
+      </div>
+
+      <div class="grid-2">
+        <section class="panel">
+          <div class="panel-header">
+            <h3 class="panel-title">💰 Ads + Revenue Links</h3>
+            <span class="badge">Monetization</span>
+          </div>
+          <p class="panel-copy">Keep sponsor tools, ad dashboards, affiliate offers, and campaign instructions easy to find.</p>
+          <div class="link-list" id="adLinks"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <h3 class="panel-title">🧰 Tools + Resources</h3>
+            <span class="badge">Support Stack</span>
+          </div>
+          <p class="panel-copy">AI, images, planning, scheduling, and content support tools that help journalists execute faster.</p>
+          <div class="link-list" id="toolLinks"></div>
+        </section>
+      </div>
+    </div>
+
+    <div class="admin-toggle-wrap">
+      <button class="admin-toggle" id="adminToggleBtn">Admin Panel</button>
+    </div>
+
+    <section class="admin-panel" id="adminPanel">
+      <div class="panel-header">
+        <h3 class="panel-title">⚙️ Admin Controls</h3>
+        <span class="badge">Local Save</span>
+      </div>
+      <p class="panel-copy">This first cut is intentionally simple. Update the title, ticker, status, and timestamps here. The data saves in the browser using local storage.</p>
+
+      <div class="admin-grid">
+        <div>
+          <div class="field">
+            <label for="adminBrandTitle">Brand Title</label>
+            <input id="adminBrandTitle" type="text" />
+          </div>
+          <div class="field">
+            <label for="adminBrandSub">Brand Subtitle</label>
+            <input id="adminBrandSub" type="text" />
+          </div>
+          <div class="field">
+            <label for="adminStatus">Status Text</label>
+            <input id="adminStatus" type="text" />
+          </div>
+          <div class="field">
+            <label for="adminUpdated">Updated Timestamp</label>
+            <input id="adminUpdated" type="text" />
+          </div>
+        </div>
+
+        <div>
+          <div class="field">
+            <label for="adminTicker">Ticker Text</label>
+            <textarea id="adminTicker"></textarea>
+          </div>
+          <div class="field">
+            <label for="adminNotes">Admin Notes</label>
+            <textarea id="adminNotes" placeholder="Example: Next step — connect live newsroom login and link manager."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-actions">
+        <button class="admin-btn primary" id="saveAdminBtn">Save Changes</button>
+        <button class="admin-btn" id="resetAdminBtn">Reset Defaults</button>
+        <button class="admin-btn" id="exportAdminBtn">Export Settings</button>
+      </div>
+      <div class="admin-note" id="adminNoteText">Tip: Next upgrade should add editable links for each card, role-based access, and direct Ghost publishing shortcuts.</div>
+    </section>
+
+    <div class="footer">
+      <div>JournalistCast™ v1.0 — Minimal Viable WBN Journalist Entry Portal</div>
+      <div>04-07-26 8:00 am PST</div>
+    </div>
+  </div>
+
+  <script>
+    const defaultData = {
+      brandTitle: 'JournalistCast™',
+      brandSub: 'WBN Journalist Command Center',
+      statusText: 'Ready',
+      updatedText: '04-07-26 8:00 am PST',
+      tickerText: 'Training updates live * Style guide refreshed * Morning brief links ready * Ad tools online * Journalist dashboard available *',
+      adminNotes: 'Tip: Next upgrade should add editable links for each card, role-based access, and direct Ghost publishing shortcuts.',
+      trainingLinks: [
+        { label: 'Journalist Quick Start', url: '#' },
+        { label: 'Daily Workflow Training', url: '#' },
+        { label: 'How To Write Why It Matters', url: '#' },
+        { label: 'Video Walkthrough Library', url: '#' }
+      ],
+      styleLinks: [
+        { label: 'WBN Style Guide', url: '#' },
+        { label: 'Approved Sources List', url: '#' },
+        { label: 'Formatting Standards', url: '#' },
+        { label: 'Ethics + Standards', url: '#' }
+      ],
+      workspaceLinks: [
+        { label: 'Log Into Journalist Dashboard', url: '#' },
+        { label: 'Open Draft Articles', url: '#' },
+        { label: 'Create New Article', url: '#' },
+        { label: 'Newsroom Command Center', url: '#' }
+      ],
+      quickActions: [
+        { label: 'Open Morning Brief', url: '#' },
+        { label: 'Launch AI Edition', url: '#' },
+        { label: 'Open Ad Dashboard', url: '#' },
+        { label: 'View All Editions', url: '#' },
+        { label: 'Go To Ghost', url: '#' },
+        { label: 'Submit Story Idea', url: '#' }
+      ],
+      adLinks: [
+        { label: 'Ad Kits + Media Pack', url: '#' },
+        { label: 'Affiliate Offers', url: '#' },
+        { label: 'Sponsor Opportunities', url: '#' },
+        { label: 'Campaign Tracking', url: '#' }
+      ],
+      toolLinks: [
+        { label: 'ChatGPT / AI Tools', url: '#' },
+        { label: 'Image Creation Tools', url: '#' },
+        { label: 'Scheduling + CRM', url: '#' },
+        { label: 'Headline + Meta Helper', url: '#' }
+      ],
+      sourceGroups: [
+        {
+          title: '🍁 Canada',
+          links: [
+            { label: 'The Globe and Mail', url: '#' },
+            { label: 'BNN Bloomberg', url: '#' },
+            { label: 'BIV', url: '#' },
+            { label: 'Financial Post', url: '#' }
+          ]
+        },
+        {
+          title: '🇺🇸 United States',
+          links: [
+            { label: 'CNBC', url: '#' },
+            { label: 'Wall Street Journal', url: '#' },
+            { label: 'Axios', url: '#' },
+            { label: 'Associated Press', url: '#' }
+          ]
+        },
+        {
+          title: '🌍 Global',
+          links: [
+            { label: 'Reuters', url: '#' },
+            { label: 'Bloomberg', url: '#' },
+            { label: 'BBC Business', url: '#' },
+            { label: 'Nikkei Asia', url: '#' }
+          ]
+        },
+        {
+          title: '🤖 AI + Tech',
+          links: [
+            { label: 'TechCrunch', url: '#' },
+            { label: 'The Verge', url: '#' },
+            { label: 'VentureBeat', url: '#' },
+            { label: 'MIT Technology Review', url: '#' }
+          ]
+        }
+      ]
+    };
+
+    const storageKey = 'journalistCast_v1_0_settings';
+
+    function getSavedData() {
+      try {
+        const raw = localStorage.getItem(storageKey);
+        if (!raw) return JSON.parse(JSON.stringify(defaultData));
+        const parsed = JSON.parse(raw);
+        return { ...defaultData, ...parsed };
+      } catch (e) {
+        return JSON.parse(JSON.stringify(defaultData));
+      }
+    }
+
+    let state = getSavedData();
+
+    function makeLinkCard(item) {
+      const a = document.createElement('a');
+      a.className = 'link-card';
+      a.href = item.url || '#';
+      a.target = item.url && item.url !== '#' ? '_blank' : '_self';
+      a.rel = 'noopener noreferrer';
+      a.innerHTML = `<span>${item.label}</span><span class="muted">Open ↗</span>`;
+      return a;
+    }
+
+    function renderList(targetId, items) {
+      const target = document.getElementById(targetId);
+      target.innerHTML = '';
+      items.forEach(item => target.appendChild(makeLinkCard(item)));
+    }
+
+    function renderQuickActions(items) {
+      const target = document.getElementById('quickActions');
+      target.innerHTML = '';
+      items.forEach(item => {
+        const a = document.createElement('a');
+        a.className = 'action-btn';
+        a.href = item.url || '#';
+        a.target = item.url && item.url !== '#' ? '_blank' : '_self';
+        a.rel = 'noopener noreferrer';
+        a.innerHTML = `<span>${item.label}</span><span class="muted">Go</span>`;
+        target.appendChild(a);
+      });
+    }
+
+    function renderSources(groups) {
+      const grid = document.getElementById('sourceGrid');
+      grid.innerHTML = '';
+      groups.forEach(group => {
+        const col = document.createElement('div');
+        col.className = 'source-col';
+        const title = document.createElement('h4');
+        title.textContent = group.title;
+        const stack = document.createElement('div');
+        stack.className = 'source-stack';
+        group.links.forEach(item => {
+          const a = document.createElement('a');
+          a.className = 'source-link';
+          a.href = item.url || '#';
+          a.target = item.url && item.url !== '#' ? '_blank' : '_self';
+          a.rel = 'noopener noreferrer';
+          a.innerHTML = `<span>${item.label}</span><span class="muted">↗</span>`;
+          stack.appendChild(a);
+        });
+        col.appendChild(title);
+        col.appendChild(stack);
+        grid.appendChild(col);
+      });
+    }
+
+    function render() {
+      document.getElementById('brandTitle').textContent = state.brandTitle;
+      document.getElementById('brandSub').textContent = state.brandSub;
+      document.getElementById('statusText').textContent = state.statusText;
+      document.getElementById('updatedText').textContent = state.updatedText;
+      document.getElementById('tickerItems').textContent = state.tickerText;
+      document.getElementById('adminNoteText').textContent = state.adminNotes;
+
+      renderList('trainingLinks', state.trainingLinks);
+      renderList('styleLinks', state.styleLinks);
+      renderList('workspaceLinks', state.workspaceLinks);
+      renderList('adLinks', state.adLinks);
+      renderList('toolLinks', state.toolLinks);
+      renderQuickActions(state.quickActions);
+      renderSources(state.sourceGroups);
+
+      document.getElementById('adminBrandTitle').value = state.brandTitle;
+      document.getElementById('adminBrandSub').value = state.brandSub;
+      document.getElementById('adminStatus').value = state.statusText;
+      document.getElementById('adminUpdated').value = state.updatedText;
+      document.getElementById('adminTicker').value = state.tickerText;
+      document.getElementById('adminNotes').value = state.adminNotes;
+    }
+
+    function saveState() {
+      localStorage.setItem(storageKey, JSON.stringify(state));
+    }
+
+    document.getElementById('adminToggleBtn').addEventListener('click', () => {
+      document.getElementById('adminPanel').classList.toggle('open');
+    });
+
+    document.getElementById('saveAdminBtn').addEventListener('click', () => {
+      state.brandTitle = document.getElementById('adminBrandTitle').value.trim() || defaultData.brandTitle;
+      state.brandSub = document.getElementById('adminBrandSub').value.trim() || defaultData.brandSub;
+      state.statusText = document.getElementById('adminStatus').value.trim() || defaultData.statusText;
+      state.updatedText = document.getElementById('adminUpdated').value.trim() || defaultData.updatedText;
+      state.tickerText = document.getElementById('adminTicker').value.trim() || defaultData.tickerText;
+      state.adminNotes = document.getElementById('adminNotes').value.trim() || defaultData.adminNotes;
+      saveState();
+      render();
+      alert('Settings saved in this browser.');
+    });
+
+    document.getElementById('resetAdminBtn').addEventListener('click', () => {
+      state = JSON.parse(JSON.stringify(defaultData));
+      saveState();
+      render();
+      alert('Defaults restored.');
+    });
+
+    document.getElementById('exportAdminBtn').addEventListener('click', () => {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'journalistcast-settings-v1.0.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    render();
+  </script>
+</body>
+</html>
