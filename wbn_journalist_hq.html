@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WBN Journalist Training HQ — WBN Global Inc.</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Source+Code+Pro:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg1:#dff5ff;--bg2:#c8ecfb;--panel:#ffffff;--border:#b7dfef;
+  --accent:#59c2eb;--accent-dark:#2f8eb3;--accent-deep:#1a7aaa;
+  --faint:#eef9fe;--line:#c8ecfb;--text:#123246;--muted:#426679;
+  --success:#1f9d63;--warning:#e6a23c;--danger:#d9534f;
+  --success-bg:#e8f7ee;--warning-bg:#fff5e8;--danger-bg:#fdf0f0;
+}
+body{font-family:Arial,sans-serif;background:linear-gradient(160deg,var(--bg1),var(--bg2));color:var(--text);min-height:100vh;}
+
+/* Header */
+.hdr{background:#fff;border-bottom:3px solid var(--accent);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;}
+.hdr-logo{font-family:'Oswald',sans-serif;font-weight:700;font-size:20px;letter-spacing:.08em;color:var(--text);text-transform:uppercase;}
+.hdr-logo span{color:var(--accent);}
+.hdr-tag{font-size:11px;color:var(--muted);margin-top:2px;}
+.hdr-right{display:flex;align-items:center;gap:12px;}
+.badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;letter-spacing:.04em;text-transform:uppercase;}
+.badge-hq{background:var(--faint);color:var(--accent-dark);border:1px solid var(--border);}
+.badge-live{background:var(--success-bg);color:var(--success);border:1px solid #9FE1CB;}
+.hdr-clock{font-family:'Source Code Pro',monospace;font-size:12px;color:var(--accent-dark);}
+
+/* Ticker */
+.ticker{background:var(--accent-dark);display:flex;align-items:center;height:32px;overflow:hidden;}
+.ticker-lbl{background:var(--accent-deep);font-family:'Source Code Pro',monospace;font-size:11px;font-weight:700;color:#fff;padding:0 16px;height:100%;display:flex;align-items:center;letter-spacing:.08em;text-transform:uppercase;flex-shrink:0;}
+.ticker-track{flex:1;overflow:hidden;}
+.ticker-scroll{display:inline-flex;gap:48px;white-space:nowrap;animation:tickmove 36s linear infinite;font-family:'Source Code Pro',monospace;font-size:12px;color:#fff;padding:0 20px;}
+.ticker-scroll:hover{animation-play-state:paused;}
+@keyframes tickmove{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* Nav */
+.nav{background:#fff;border-bottom:2px solid var(--line);display:flex;padding:0 24px;overflow-x:auto;}
+.nav-item{font-family:Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:11px 16px;cursor:pointer;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-item:hover{color:var(--accent-dark);}
+.nav-item.active{color:var(--text);border-bottom-color:var(--accent);}
+
+/* Layout */
+.shell{display:flex;min-height:calc(100vh - 168px);}
+.sidebar{width:210px;background:#fff;border-right:1px solid var(--line);flex-shrink:0;padding:16px 0;}
+.sb-section{padding:0 12px;margin-bottom:18px;}
+.sb-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding:0 4px;}
+.sb-item{font-family:Arial,sans-serif;font-size:13px;color:var(--muted);padding:7px 10px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .12s,color .12s;}
+.sb-item:hover{background:var(--faint);color:var(--text);}
+.sb-item.active{background:var(--faint);color:var(--accent-dark);font-weight:700;}
+.sb-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.d-blue{background:var(--accent);}
+.d-green{background:var(--success);}
+.d-amber{background:var(--warning);}
+.d-gray{background:#b7dfef;}
+
+/* Content */
+.content{flex:1;padding:22px 26px;min-width:0;}
+.panel{display:none;}
+.panel.active{display:block;}
+.page-title{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--text);margin-bottom:3px;}
+.page-sub{font-family:'Source Code Pro',monospace;font-size:11px;color:var(--muted);margin-bottom:18px;}
+
+/* Stat cards */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;}
+.stat-card{background:#fff;border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:14px;padding:12px 14px;}
+.stat-card.green{border-top-color:var(--success);}
+.stat-card.amber{border-top-color:var(--warning);}
+.stat-card.deep{border-top-color:var(--accent-deep);}
+.stat-num{font-family:'Oswald',sans-serif;font-size:26px;font-weight:700;color:var(--text);line-height:1;}
+.stat-lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:4px;}
+
+/* Section rule */
+.rule{display:flex;align-items:center;gap:10px;margin:18px 0 12px;}
+.rule-bar{width:3px;height:20px;background:var(--accent);border-radius:0;}
+.rule-title{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text);}
+.rule-right{font-family:'Source Code Pro',monospace;font-size:10px;color:var(--muted);margin-left:auto;}
+
+/* Module cards */
+.module-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:20px;}
+.module-card{background:#fff;border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:16px;padding:14px 16px;cursor:pointer;transition:border-color .15s,background .15s;}
+.module-card:hover{border-color:var(--accent-dark);background:var(--faint);}
+.module-card.green{border-top-color:var(--success);}
+.module-card.amber{border-top-color:var(--warning);}
+.module-card.deep{border-top-color:var(--accent-deep);}
+.mc-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;margin-bottom:8px;display:inline-block;text-transform:uppercase;letter-spacing:.04em;}
+.mc-tag-blue{background:var(--faint);color:var(--accent-dark);border:1px solid var(--border);}
+.mc-tag-green{background:var(--success-bg);color:var(--success);border:1px solid #9FE1CB;}
+.mc-tag-amber{background:var(--warning-bg);color:var(--warning);border:1px solid #f5d08a;}
+.mc-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:5px;line-height:1.3;}
+.mc-desc{font-size:12px;color:var(--muted);line-height:1.5;}
+
+/* Prompt cards */
+.prompt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px;margin-bottom:16px;}
+.prompt-card{background:#fff;border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:0 14px 14px 0;padding:13px 15px;cursor:pointer;transition:background .12s;}
+.prompt-card:hover{background:var(--faint);}
+.prompt-card.breaking{border-left-color:var(--danger);}
+.prompt-card.framework{border-left-color:var(--success);}
+.prompt-card.grok{border-left-color:var(--warning);}
+.prompt-card.meta{border-left-color:var(--accent-deep);}
+.pt-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;margin-bottom:6px;display:inline-block;text-transform:uppercase;letter-spacing:.04em;}
+.pt-breaking{background:var(--danger-bg);color:var(--danger);border:1px solid #f09595;}
+.pt-framework{background:var(--success-bg);color:var(--success);border:1px solid #9FE1CB;}
+.pt-grok{background:var(--warning-bg);color:var(--warning);border:1px solid #f5d08a;}
+.pt-daily{background:var(--faint);color:var(--accent-dark);border:1px solid var(--border);}
+.pt-meta{background:#f0f4ff;color:#3a5bbf;border:1px solid #b3c4f7;}
+.pt-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.3;}
+.pt-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:8px;}
+.pt-footer{display:flex;align-items:center;justify-content:space-between;}
+.pt-date{font-family:'Source Code Pro',monospace;font-size:10px;color:var(--muted);}
+
+/* Buttons */
+.btn-sm{font-size:11px;font-weight:700;padding:5px 14px;border-radius:8px;border:none;cursor:pointer;text-transform:uppercase;letter-spacing:.04em;text-decoration:none;display:inline-block;}
+.btn-blue{background:var(--accent);color:#fff;}
+.btn-blue:hover{background:var(--accent-dark);}
+.btn-outline{background:#fff;color:var(--accent-dark);border:1px solid var(--accent) !important;border-radius:8px;font-size:11px;font-weight:700;padding:5px 14px;cursor:pointer;text-transform:uppercase;letter-spacing:.04em;text-decoration:none;display:inline-block;}
+.btn-outline:hover{background:var(--faint);}
+
+/* Framework */
+.fw-card{background:#fff;border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden;}
+.fw-head{background:var(--faint);border-bottom:1px solid var(--border);padding:11px 16px;display:flex;align-items:center;justify-content:space-between;}
+.fw-head-title{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-dark);}
+.fw-step{font-family:'Source Code Pro',monospace;font-size:10px;color:var(--muted);}
+.fw-body{padding:14px 16px;}
+.fw-rule{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--faint);}
+.fw-rule:last-child{border-bottom:none;}
+.fw-arrow{font-size:13px;color:var(--accent);min-width:18px;}
+.fw-text{font-size:13px;color:var(--text);line-height:1.55;}
+.fw-text strong{font-weight:700;color:var(--text);}
+
+/* Guide cards */
+.guide-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:16px;}
+.guide-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px 16px;}
+.guide-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.guide-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:10px;}
+.guide-status{font-family:'Source Code Pro',monospace;font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:.04em;display:inline-block;margin-bottom:10px;}
+.gs-text{background:var(--warning-bg);color:var(--warning);border:1px solid #f5d08a;}
+.gs-live{background:var(--success-bg);color:var(--success);border:1px solid #9FE1CB;}
+.guide-btn{font-size:11px;font-weight:700;padding:6px 14px;border-radius:8px;border:1px solid var(--accent);background:#fff;color:var(--accent-dark);cursor:pointer;text-transform:uppercase;letter-spacing:.04em;display:block;width:100%;text-align:center;}
+.guide-btn:hover{background:var(--faint);}
+
+/* Training calendar */
+.cal-link{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:16px;text-decoration:none;transition:background .12s;}
+.cal-link:hover{background:var(--faint);}
+.cal-icon{width:42px;height:42px;background:var(--faint);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.cal-info{flex:1;}
+.cal-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.cal-sub{font-family:'Source Code Pro',monospace;font-size:11px;color:var(--muted);}
+.cal-arrow{font-size:20px;color:var(--accent);}
+.session-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px;}
+.session-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.session-meta{font-family:'Source Code Pro',monospace;font-size:11px;color:var(--muted);}
+.session-right{display:flex;gap:8px;align-items:center;flex-shrink:0;}
+
+/* Add bar */
+.add-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.add-bar input,.add-bar select{font-family:Arial,sans-serif;font-size:13px;border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--text);background:#fff;}
+.add-bar input:focus,.add-bar select:focus{outline:none;border-color:var(--accent);}
+.add-bar input{flex:1;min-width:160px;}
+
+/* Roadmap */
+.roadmap{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px 16px;}
+.roadmap-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.roadmap-item{font-size:12px;color:var(--text);padding:5px 0;border-bottom:1px solid var(--faint);display:flex;gap:8px;align-items:center;}
+.roadmap-item.done{color:var(--text);}
+.roadmap-item.partial{color:var(--text);}
+.roadmap-item.todo{color:var(--muted);}
+.roadmap-icon{font-size:13px;flex-shrink:0;}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(18,50,70,0.5);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:#fff;border-radius:18px;border-top:4px solid var(--accent);width:100%;max-width:620px;overflow:hidden;max-height:90vh;display:flex;flex-direction:column;}
+.modal-hd{background:var(--faint);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.modal-hd-title{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-dark);}
+.modal-close-btn{background:none;border:none;font-size:20px;color:var(--muted);cursor:pointer;line-height:1;padding:0 4px;}
+.modal-close-btn:hover{color:var(--danger);}
+.modal-bd{padding:16px;overflow-y:auto;flex:1;}
+.modal-bd pre{font-family:'Source Code Pro',monospace;font-size:11px;color:var(--text);line-height:1.75;white-space:pre-wrap;background:var(--faint);border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:10px;}
+.modal-ft{padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;background:#fff;flex-shrink:0;}
+
+/* Notice */
+.notice{font-family:'Source Code Pro',monospace;font-size:11px;color:#7a5000;background:var(--warning-bg);border-left:3px solid var(--warning);padding:8px 12px;margin-bottom:14px;line-height:1.65;border-radius:0 8px 8px 0;}
+
+/* Footer */
+.hq-footer{background:#fff;border-top:1px solid var(--border);padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.footer-brand{font-family:'Source Code Pro',monospace;font-size:11px;color:var(--muted);}
+.footer-ver{font-family:'Source Code Pro',monospace;font-size:10px;color:var(--muted);}
+
+/* Responsive */
+@media(max-width:700px){
+  .stat-row{grid-template-columns:1fr 1fr;}
+  .shell{flex-direction:column;}
+  .sidebar{width:100%;border-right:none;border-bottom:1px solid var(--line);padding:8px 0;}
+  .roadmap-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="hdr">
+  <div>
+    <div class="hdr-logo">WBN <span>Global</span> Inc.™</div>
+    <div class="hdr-tag">Journalist Training HQ &middot; Sub-Platform v1.0</div>
+  </div>
+  <div class="hdr-right">
+    <span class="badge badge-live">Live</span>
+    <span class="badge badge-hq">HQ Platform</span>
+    <span class="hdr-clock" id="hqClock">--:--:-- UTC</span>
+  </div>
+</div>
+
+<!-- Ticker -->
+<div class="ticker">
+  <div class="ticker-lbl">WBN HQ</div>
+  <div class="ticker-track">
+    <div class="ticker-scroll">
+      <span>WBN Journalist Training HQ &middot; Prompt Library &middot; Article Framework &middot; Editorial Standards &middot; Training Calendar &middot; Guide Upgrades</span>
+      <span>Train smarter &middot; Publish better &middot; Build the WBN standard across every journalist and every region</span>
+      <span>WBN Journalist Training HQ &middot; Prompt Library &middot; Article Framework &middot; Editorial Standards &middot; Training Calendar &middot; Guide Upgrades</span>
+      <span>Train smarter &middot; Publish better &middot; Build the WBN standard across every journalist and every region</span>
+    </div>
+  </div>
+</div>
+
+<!-- Nav -->
+<div class="nav">
+  <div class="nav-item active" id="nav-dashboard" onclick="showPanel('dashboard')">Dashboard</div>
+  <div class="nav-item" id="nav-prompts" onclick="showPanel('prompts')">Prompt Library</div>
+  <div class="nav-item" id="nav-framework" onclick="showPanel('framework')">Article Framework</div>
+  <div class="nav-item" id="nav-guides" onclick="showPanel('guides')">Training Guides</div>
+  <div class="nav-item" id="nav-calendar" onclick="showPanel('calendar')">Training Calendar</div>
+</div>
+
+<!-- Shell -->
+<div class="shell">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sb-section">
+      <div class="sb-label">Platform</div>
+      <div class="sb-item active" id="sb-dashboard" onclick="showPanel('dashboard')"><div class="sb-dot d-blue"></div>Dashboard</div>
+      <div class="sb-item" id="sb-calendar" onclick="showPanel('calendar')"><div class="sb-dot d-green"></div>Training Calendar</div>
+    </div>
+    <div class="sb-section">
+      <div class="sb-label">Editorial Tools</div>
+      <div class="sb-item" id="sb-prompts" onclick="showPanel('prompts')"><div class="sb-dot d-blue"></div>Prompt Library</div>
+      <div class="sb-item" id="sb-framework" onclick="showPanel('framework')"><div class="sb-dot d-green"></div>Article Framework</div>
+      <div class="sb-item" id="sb-guides" onclick="showPanel('guides')"><div class="sb-dot d-amber"></div>Training Guides</div>
+    </div>
+    <div class="sb-section">
+      <div class="sb-label">Standards</div>
+      <div class="sb-item" onclick="showPanel('framework')"><div class="sb-dot d-gray"></div>WBN Style Rules</div>
+      <div class="sb-item" onclick="showPanel('prompts')"><div class="sb-dot d-gray"></div>Prompt Standards</div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="page-title">Journalist Training HQ</div>
+      <div class="page-sub">WBN Global Inc. &middot; Training &amp; Standards Platform &middot; April 2026</div>
+
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-num">4</div><div class="stat-lbl">Prompts Saved</div></div>
+        <div class="stat-card green"><div class="stat-num">6</div><div class="stat-lbl">Framework Sections</div></div>
+        <div class="stat-card amber"><div class="stat-num">5</div><div class="stat-lbl">Guides To Upgrade</div></div>
+        <div class="stat-card deep"><div class="stat-num">1</div><div class="stat-lbl">Training Calendar</div></div>
+      </div>
+
+      <div class="rule"><div class="rule-bar"></div><div class="rule-title">Platform Modules</div></div>
+      <div class="module-grid">
+        <div class="module-card" onclick="showPanel('prompts')">
+          <div class="mc-tag mc-tag-blue">Library</div>
+          <div class="mc-title">Prompt Library</div>
+          <div class="mc-desc">All WBN prompts — breaking news, Grok feed, article framework, meta tags.</div>
+        </div>
+        <div class="module-card green" onclick="showPanel('framework')">
+          <div class="mc-tag mc-tag-green">Standards</div>
+          <div class="mc-title">Article Framework</div>
+          <div class="mc-desc">Every section, every format, every WBN editorial standard. The journalist's bible.</div>
+        </div>
+        <div class="module-card amber" onclick="showPanel('guides')">
+          <div class="mc-tag mc-tag-amber">Upgrade</div>
+          <div class="mc-title">Training Guides</div>
+          <div class="mc-desc">5 guides in text format — being upgraded to interactive WBN-standard modules.</div>
+        </div>
+        <div class="module-card deep" onclick="showPanel('calendar')">
+          <div class="mc-tag mc-tag-blue">Live</div>
+          <div class="mc-title">Training Calendar</div>
+          <div class="mc-desc">Live sessions, publisher help desk, onboarding — linked to the WBN training calendar.</div>
+        </div>
+      </div>
+
+      <div class="rule"><div class="rule-bar"></div><div class="rule-title">Build Roadmap</div><div class="rule-right">Sub-Platform v1.0</div></div>
+      <div class="roadmap">
+        <div class="roadmap-grid">
+          <div class="roadmap-item done"><span class="roadmap-icon" style="color:var(--success);">&#10003;</span>Dashboard + Navigation</div>
+          <div class="roadmap-item done"><span class="roadmap-icon" style="color:var(--success);">&#10003;</span>Prompt Library</div>
+          <div class="roadmap-item done"><span class="roadmap-icon" style="color:var(--success);">&#10003;</span>Article Framework Standards</div>
+          <div class="roadmap-item done"><span class="roadmap-icon" style="color:var(--success);">&#10003;</span>Training Calendar Link</div>
+          <div class="roadmap-item done"><span class="roadmap-icon" style="color:var(--success);">&#10003;</span>Training Guides Panel</div>
+          <div class="roadmap-item partial"><span class="roadmap-icon" style="color:var(--warning);">&#9680;</span>Guide Upgrade Builder</div>
+          <div class="roadmap-item todo"><span class="roadmap-icon" style="color:var(--muted);">&#9675;</span>Journalist Login &amp; Profiles</div>
+          <div class="roadmap-item todo"><span class="roadmap-icon" style="color:var(--muted);">&#9675;</span>News Engine Integration</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROMPT LIBRARY -->
+    <div class="panel" id="panel-prompts">
+      <div class="page-title">Prompt Library</div>
+      <div class="page-sub">All saved WBN prompts &middot; Click any card to view and copy</div>
+
+      <div class="add-bar">
+        <input type="text" id="newPromptTitle" placeholder="New prompt title...">
+        <select id="newPromptTag">
+          <option value="daily">Daily</option>
+          <option value="breaking">Breaking</option>
+          <option value="framework">Framework</option>
+          <option value="grok">Grok</option>
+          <option value="meta">Meta</option>
+        </select>
+        <button class="btn-sm btn-blue" onclick="addPrompt()">+ Add Prompt</button>
+      </div>
+
+      <div class="prompt-grid" id="promptGrid"></div>
+    </div>
+
+    <!-- ARTICLE FRAMEWORK -->
+    <div class="panel" id="panel-framework">
+      <div class="page-title">Article Framework</div>
+      <div class="page-sub">WBN editorial standards &middot; Every section, every format, every rule</div>
+
+      <div class="fw-card">
+        <div class="fw-head"><div class="fw-head-title">1 &mdash; Title &amp; Byline</div><div class="fw-step">Required &middot; Always first</div></div>
+        <div class="fw-body">
+          <div class="fw-rule"><div class="fw-arrow">&rarr;</div><div class="fw-text"><strong>Title format:</strong> &#127757; WBN Breaking News &ndash; [DATE]: [Primary Signal Headline]</div></div>
+          <div class="fw-rule"><div class="fw-arrow">&rarr;</div><div class="fw-text"><strong>Headline rule:</strong> Market-aware, outcome-focused, sharp. No passive voice. Max 15 words.</div></div>
+          <div class="fw-rule"><div class="fw-arrow">&rarr;</div><div class="fw-text"><strong>Byline:</strong> By WBN Global News Desk | WBN News Subscribe (https://wbn.digital?fpr=george65) | [DATE]</div></div>
+        </div>
+      </div>
+
+      <div class="fw-card">
+        <div class="fw-head"><div class="fw-head-title">2 &mdash; Opening &amp; At A Glance</div><div class="fw-step">Required &middot; Sets the signal</div></div>
+        <div class="fw-body">
+          <div class="fw-rule"><div class="fw-arrow">&rarr;</div><div class="fw-text"><strong>Opening paragraph:</strong> 1&ndash;2 sentences max. Global impact + economic signal. No fluff.</div></div>
+          <div class="fw-rule"><div class="fw-arrow">&rarr;</div><div class="fw-text"><strong>At A Glance:</strong> Exactly 5 bullet points &middot; 4&ndash;6 words each &middot; Top signals across all regions</div></div>
+        </div>
+      </div>
+
+      <div class="fw-card">
+        <div class="fw-head"><div class="fw-head-title">3 &mdash; Regional Sections</div><div class="fw-step">Required &middot; In this order</div></div>
+        <div class="fw-body">
+          <div class="fw-rule"><div class="fw-arrow">&rarr;</div><div class="fw-text"><strong>Order:</strong> &#127809; Canada &rarr; &#129413; United States &rarr; &#127757; Africa &rarr; &#127760; International</div></div>
+          <div class="fw-rule"><div class="fw-arrow">&rarr;</div><div class="fw-text"><strong>Each story:</strong> Headline / Date / Source / Summary (1 sentence) / Why It Matters (1 sentence, business lens)</div></div>
+          <div class="fw-rule"><div class="fw-arrow">&rarr;</div><div class="fw-text"><strong>Minimum:</strong> 5 stories per region. Business and economic relevance only.</div></div>
+        </div>
+      </div>
+
+      <div class="fw-card">
+        <div class="fw-head"><div class="fw-head-title">4 &mdash; Watch List</div><div class="fw-step">Required &middot; 8&ndash;12 items</div></div>
+        <div class="fw-body">
+          <div class="fw-rule"><div class="fw-arrow">&rarr;</div><div class="fw-text"><strong>Title format:</strong> &#128064; Watch List &ndash; Developing Stories</div></div>
+          <div class="fw-rule"><div class="fw-arrow">&rarr;</div><div class="fw-text"><strong>Format:</strong> [Story] &mdash; [Region] &mdash; [Source]</div></div>
+          <div class="fw-rule"><div class="fw-arrow">&rarr;</div><div class="fw-text">Stories that did not make the main sections but carry forward signal value for business.</div></div>
+        </div>
+      </div>
+
+      <div class="fw-card">
+        <div class="fw-head"><div class="fw-head-title">5 &mdash; Why It All Matters</div><div class="fw-step">Required &middot; Signal analysis</div></div>
+        <div class="fw-body">
+          <div class="fw-rule"><div class="fw-arrow">&rarr;</div><div class="fw-text"><strong>Open with:</strong> &ldquo;What we are seeing is not a single story&mdash;it&rsquo;s a system-level shift.&rdquo;</div></div>
+          <div class="fw-rule"><div class="fw-arrow">&rarr;</div><div class="fw-text"><strong>Then:</strong> 3&ndash;4 short lines (no bullets). Cover: Markets &middot; Energy &middot; Governments &middot; Global positioning</div></div>
+          <div class="fw-rule"><div class="fw-arrow">&rarr;</div><div class="fw-text"><strong>Tone:</strong> Strategic, signal-driven. Not descriptive. Not journalistic. Business intelligence only.</div></div>
+        </div>
+      </div>
+
+      <div class="fw-card">
+        <div class="fw-head"><div class="fw-head-title">6 &mdash; Footer, Tags, Scroll &amp; Meta</div><div class="fw-step">Required &middot; End of every brief</div></div>
+        <div class="fw-body">
+          <div class="fw-rule"><div class="fw-arrow">&rarr;</div><div class="fw-text"><strong>Footer:</strong> WBN Global News Desk &middot; World Business News &middot; Subscribe link &middot; newsdesk@wbnn.news</div></div>
+          <div class="fw-rule"><div class="fw-arrow">&rarr;</div><div class="fw-text"><strong>Tags:</strong> Start with #Breaking News &middot; No space between # and word &middot; Space between words</div></div>
+          <div class="fw-rule"><div class="fw-arrow">&rarr;</div><div class="fw-text"><strong>Breaking Scroll:</strong> &#128308; Exactly 20 items &middot; 4&ndash;6 words each &middot; No periods &middot; Separated by &ldquo; * &rdquo;</div></div>
+          <div class="fw-rule"><div class="fw-arrow">&rarr;</div><div class="fw-text"><strong>Meta:</strong> Title &le;56 chars &middot; Description &le;140 chars &middot; At very end of article</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRAINING GUIDES -->
+    <div class="panel" id="panel-guides">
+      <div class="page-title">Training Guides</div>
+      <div class="page-sub">5 guides in text format &mdash; upgrading to interactive WBN-standard modules</div>
+
+      <div class="rule"><div class="rule-bar"></div><div class="rule-title">Current Guides</div><div class="rule-right">Paste text below to upgrade any guide</div></div>
+
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-status gs-text">Text Format</div>
+          <div class="guide-title">WBN Writing Standards Guide</div>
+          <div class="guide-desc">AP wire tone, sentence construction, active voice rules, and WBN vocabulary standards.</div>
+          <button class="guide-btn" onclick="focusUpgrade('WBN Writing Standards Guide')">Upgrade This Guide &rarr;</button>
+        </div>
+        <div class="guide-card">
+          <div class="guide-status gs-text">Text Format</div>
+          <div class="guide-title">How to Use the Prompt Library</div>
+          <div class="guide-desc">Step-by-step guide for journalists on selecting, customising, and running WBN prompts.</div>
+          <button class="guide-btn" onclick="focusUpgrade('How to Use the Prompt Library')">Upgrade This Guide &rarr;</button>
+        </div>
+        <div class="guide-card">
+          <div class="guide-status gs-text">Text Format</div>
+          <div class="guide-title">Regional Section Standards</div>
+          <div class="guide-desc">Canada, US, Africa, International &mdash; sourcing rules, story selection criteria, and regional focus.</div>
+          <button class="guide-btn" onclick="focusUpgrade('Regional Section Standards')">Upgrade This Guide &rarr;</button>
+        </div>
+        <div class="guide-card">
+          <div class="guide-status gs-text">Text Format</div>
+          <div class="guide-title">Why It Matters Framework</div>
+          <div class="guide-desc">How to write the signal analysis section &mdash; tone, structure, and the system-level shift opening.</div>
+          <button class="guide-btn" onclick="focusUpgrade('Why It Matters Framework')">Upgrade This Guide &rarr;</button>
+        </div>
+        <div class="guide-card">
+          <div class="guide-status gs-text">Text Format</div>
+          <div class="guide-title">Source Verification Guide</div>
+          <div class="guide-desc">How to vet sources, check publication credibility, and apply the WBN sourcing standard.</div>
+          <button class="guide-btn" onclick="focusUpgrade('Source Verification Guide')">Upgrade This Guide &rarr;</button>
+        </div>
+      </div>
+
+      <div class="rule" style="margin-top:8px;"><div class="rule-bar"></div><div class="rule-title">Paste &amp; Upgrade a Guide</div></div>
+      <div style="background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px;">
+        <div style="font-size:13px;color:var(--muted);margin-bottom:10px;">Select a guide above, paste its text content below, then send to Claude to restructure into an interactive WBN-standard training module.</div>
+        <div style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--accent-dark);margin-bottom:6px;" id="upgradeLabel">No guide selected &mdash; click &ldquo;Upgrade This Guide&rdquo; above</div>
+        <textarea style="width:100%;font-family:Arial,sans-serif;font-size:13px;border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--text);background:var(--faint);resize:vertical;min-height:100px;margin-bottom:10px;line-height:1.55;" id="guideText" placeholder="Paste your guide text here..."></textarea>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn-sm btn-blue" id="upgradeBtn" onclick="handleUpgrade()">Send to Claude for Upgrade &rarr;</button>
+          <button class="btn-sm btn-outline" onclick="document.getElementById('guideText').value='';document.getElementById('upgradeLabel').textContent='No guide selected \u2014 click \u201cUpgrade This Guide\u201d above';">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRAINING CALENDAR -->
+    <div class="panel" id="panel-calendar">
+      <div class="page-title">Training Calendar</div>
+      <div class="page-sub">Live sessions, publisher help desk, and onboarding walkthroughs</div>
+
+      <a class="cal-link" href="https://wbnnglobalinc.mymidnight.blog/training-support/" target="_blank">
+        <div class="cal-icon">&#128197;</div>
+        <div class="cal-info">
+          <div class="cal-title">WBN Training &amp; Support Calendar</div>
+          <div class="cal-sub">wbnnglobalinc.mymidnight.blog/training-support/ &middot; Live sessions &middot; Weekly schedule</div>
+        </div>
+        <div class="cal-arrow">&#8599;</div>
+      </a>
+
+      <div class="rule"><div class="rule-bar"></div><div class="rule-title">Upcoming Sessions</div></div>
+
+      <div class="session-card">
+        <div>
+          <div class="session-title">Publisher Help Desk &ndash; Live Q&amp;A</div>
+          <div class="session-meta">Mon, Apr 7, 2026 &middot; 10:00 AM &ndash; 11:00 AM &middot; 60 min &middot; Repeats weekly</div>
+        </div>
+        <div class="session-right">
+          <span class="badge badge-live">Live Now</span>
+          <a href="https://wbnnglobalinc.mymidnight.blog/training-support/" target="_blank" class="btn-sm btn-blue" style="text-decoration:none;">Join Training</a>
+        </div>
+      </div>
+
+      <div class="session-card">
+        <div>
+          <div class="session-title">Member Onboarding Walkthrough</div>
+          <div class="session-meta">Wed, Apr 9, 2026 &middot; 2:00 PM &ndash; 3:00 PM &middot; 60 min &middot; One-time session</div>
+        </div>
+        <div class="session-right">
+          <span class="badge" style="background:var(--warning-bg);color:var(--warning);border:1px solid #f5d08a;">Upcoming</span>
+          <a href="https://wbnnglobalinc.mymidnight.blog/training-support/" target="_blank" class="btn-sm btn-outline" style="text-decoration:none;">Register</a>
+        </div>
+      </div>
+
+      <div class="session-card">
+        <div>
+          <div class="session-title">WBN Article Framework Workshop</div>
+          <div class="session-meta">Fri, Apr 11, 2026 &middot; 11:00 AM &ndash; 12:00 PM &middot; 60 min &middot; One-time session</div>
+        </div>
+        <div class="session-right">
+          <span class="badge" style="background:var(--warning-bg);color:var(--warning);border:1px solid #f5d08a;">Upcoming</span>
+          <a href="https://wbnnglobalinc.mymidnight.blog/training-support/" target="_blank" class="btn-sm btn-outline" style="text-decoration:none;">Register</a>
+        </div>
+      </div>
+
+      <div class="notice" style="margin-top:6px;">
+        &#9432; Training sessions shown for the next 21 days. Visit the full calendar to view all upcoming events and register.
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /shell -->
+
+<!-- Footer -->
+<div class="hq-footer">
+  <div class="footer-brand">WBN Global Inc.&trade; &middot; Journalist Training HQ &middot; newsdesk@wbnn.news</div>
+  <div class="footer-ver" id="footerVer">WBN HQ v1.0 &middot; -- PST</div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-hd">
+      <div class="modal-hd-title" id="modalTitle">Prompt</div>
+      <button class="modal-close-btn" id="modalCloseBtn">&times;</button>
+    </div>
+    <div class="modal-bd">
+      <div id="modalTag"></div>
+      <pre id="modalBody"></pre>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-sm btn-blue" id="modalCopyBtn">Copy Prompt</button>
+      <button class="btn-sm btn-outline" id="modalBackBtn">Back</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+var currentGuide = '';
+
+var PROMPTS = [
+  {id:1,tag:'breaking',title:'WBN Master Prompt — Breaking News Full Stack',
+   desc:'Complete breaking news article generator. Title, byline, at a glance, regional sections, watch list, why it matters, tags, scroll, meta.',
+   date:'April 8, 2026',
+   body:'WBN MASTER PROMPT — BREAKING NEWS (FULL STACK)\n\nCreate a WBN Breaking News article using the following structure:\n\n1) TITLE\nFormat: WBN Breaking News – [DATE]: [Primary Signal Headline]\n· Headline must reflect the dominant global signal\n· Sharp, market-aware, outcome-focused\n\n2) BYLINE\nBy WBN Global News Desk | WBN News Subscribe (https://wbn.digital?fpr=george65) | [DATE]\n\n3) OPENING PARAGRAPH\n· 1–2 sentences max\n· Global impact + economic signal · No fluff\n\n4) AT A GLANCE\n· 5 bullet points · 4–6 words each\n· Top signals across all regions\n\n5) MAIN SECTIONS (IN ORDER)\nCanada · United States · Africa · International\nEach story: Headline / Date / Source / Summary (1 sentence) / Why It Matters (1 sentence)\n\n6) WATCH LIST\nWatch List – Developing Stories\n· 8–12 items · Format: [Story] — [Region] — [Source]\n\n7) WHY IT ALL MATTERS\nOpen: "What we are seeing is not a single story—it\'s a system-level shift."\n3–4 lines: Markets · Energy · Governments · Global positioning\n\n8) FOOTER\nWBN Global News Desk · World Business News (WBN) – Real-Time Intelligence For Business\nSubscribe (https://wbn.digital?fpr=george65) · Contact: newsdesk@wbnn.news\n\n9) TAGS\nTAGS: #Breaking News #Global Markets #Oil Prices #Geopolitics ...\n\n10) BREAKING SCROLL\nBreaking News – [DATE] – [TIME PST]\nExactly 20 items · 4–6 words · No periods · " * " separator\n\n11) IMAGE PROMPT\nCinematic, ultra-realistic, 16:9, no text, no logos\n\n12) IMAGE CAPTION\n6–7 words, each word capitalized\n\n13) META\nMeta Tag Title (56 chars max)\nMeta Tag Description (140 chars max)'},
+
+  {id:2,tag:'grok',title:'Grok News Feed Prompt — 12-Hour Business Brief',
+   desc:'Paste into Grok to pull 5 business stories per region + 5 watch list items from the past 12 hours.',
+   date:'April 8, 2026',
+   body:'You are a global business news editor. Search the internet and find real, verified news stories from the past 12 hours only. Return the following — no links, no fluff, clean format only:\n\nCANADA — Top 5 Business Stories\nHeadline:\nDate:\nSource:\nSummary: (1 sentence — business/economic focus)\n\nUNITED STATES — Top 5 Business Stories\nHeadline:\nDate:\nSource:\nSummary: (1 sentence — business/economic focus)\n\nAFRICA — Top 5 Business Stories\nHeadline:\nDate:\nSource:\nSummary: (1 sentence — business/economic focus)\n\nINTERNATIONAL — Top 5 Business Stories\nHeadline:\nDate:\nSource:\nSummary: (1 sentence — business/economic focus)\n\nWATCH LIST — 5 Developing Stories\nHeadline:\nDate:\nSource:\nSummary: (1 sentence — business/economic focus)\n\nEXAMPLE FORMAT (follow exactly for every story):\nHeadline: Emerging markets face capital outflows\nDate: April 8, 2026\nSource: Bloomberg\nSummary: Investors pull funds amid rising uncertainty.\n\nRULES:\n· Past 12 hours only\n· Business, markets, economy, energy, trade, geopolitics with economic impact\n· Real sources with real publication names\n· No links · No editorializing\n· Consistent format throughout'},
+
+  {id:3,tag:'framework',title:'WBN Article Standards Framework Prompt',
+   desc:'Instructs Claude or ChatGPT to follow WBN article structure precisely when building any brief.',
+   date:'April 8, 2026',
+   body:'You are the WBN Global News Desk senior editor. Every article you write must follow the WBN Article Framework exactly:\n\nSTRUCTURE ORDER:\n1. Title (WBN format with date and signal headline)\n2. Byline (WBN format with subscribe link)\n3. Opening paragraph (1–2 sentences, no fluff)\n4. At A Glance (5 bullets, 4–6 words each)\n5. Regional sections in order: Canada → US → Africa → International\n   Each story: Headline / Date / Source / Summary / Why It Matters\n6. Watch List (8–12 items, [Story] — [Region] — [Source])\n7. Why It All Matters (open with system-level shift line, 3–4 strategic lines)\n8. Footer (WBN standard footer with subscribe and contact)\n9. Tags (#Breaking News first, no space between # and word)\n10. Breaking Scroll (exactly 20 items, 4–6 words, " * " separator)\n11. Image Prompt (cinematic, 16:9, no text)\n12. Image Caption (6–7 words, each word capitalized)\n13. Meta (title 56 chars max, description 140 chars max)\n\nTONE: AP wire authority. Strategic. Signal-driven. No filler. No passive voice.\nVOICE: WBN Global News Desk — premium business intelligence, not general news.'},
+
+  {id:4,tag:'meta',title:'WBN Meta Tag Generator',
+   desc:'Generates SEO meta title (56 chars max) and meta description (140 chars max) from any WBN article.',
+   date:'April 8, 2026',
+   body:'Given the following WBN article headline and opening summary, generate:\n\nMETA TAG TITLE: (56 characters max — include "WBN" brand — count carefully)\nMETA TAG DESCRIPTION: (140 characters max — factual, keyword-rich, mention WBN)\n\nRules:\n· Meta title must be under 56 characters including spaces\n· Meta description must be under 140 characters including spaces\n· Both must be factual — no hype language\n· Always include "WBN" in the title\n· Description must include 2–3 key business/economic keywords from the article\n· Output: two lines only, labeled exactly as shown above'}
+];
+
+var prompts = PROMPTS.slice();
+
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-item').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.sb-item').forEach(function(t){t.classList.remove('active');});
+  var p = document.getElementById('panel-' + id);
+  if(p) p.classList.add('active');
+  var nav = document.getElementById('nav-' + id);
+  if(nav) nav.classList.add('active');
+  var sb = document.getElementById('sb-' + id);
+  if(sb) sb.classList.add('active');
+  if(id === 'prompts') renderPrompts();
+  window.scrollTo(0,0);
+}
+
+function renderPrompts() {
+  var grid = document.getElementById('promptGrid');
+  if(!grid) return;
+  grid.innerHTML = prompts.map(function(p){
+    return '<div class="prompt-card ' + p.tag + '" data-id="' + p.id + '">' +
+      '<div class="pt-tag pt-' + p.tag + '">' + p.tag + '</div>' +
+      '<div class="pt-title">' + esc(p.title) + '</div>' +
+      '<div class="pt-desc">' + esc(p.desc) + '</div>' +
+      '<div class="pt-footer"><span class="pt-date">' + p.date + '</span>' +
+      '<button class="btn-sm btn-blue view-btn" data-id="' + p.id + '">View &rarr;</button></div>' +
+      '</div>';
+  }).join('');
+}
+
+document.addEventListener('click', function(e) {
+  var viewBtn = e.target.closest('.view-btn');
+  if(viewBtn) { openModal(parseInt(viewBtn.getAttribute('data-id'))); return; }
+  var card = e.target.closest('.prompt-card');
+  if(card && !e.target.closest('button')) { openModal(parseInt(card.getAttribute('data-id'))); }
+});
+
+function openModal(id) {
+  var p = prompts.find(function(x){return x.id === id;});
+  if(!p) return;
+  document.getElementById('modalTitle').textContent = p.title;
+  document.getElementById('modalTag').innerHTML = '<span class="pt-tag pt-' + p.tag + '">' + p.tag + '</span>';
+  document.getElementById('modalBody').textContent = p.body;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+document.getElementById('modalBackBtn').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', function(e){
+  if(e.target === this) closeModal();
+});
+
+document.getElementById('modalCopyBtn').addEventListener('click', function(){
+  var text = document.getElementById('modalBody').textContent;
+  if(navigator.clipboard) {
+    navigator.clipboard.writeText(text).catch(function(){fallbackCopy(text);});
+  } else { fallbackCopy(text); }
+  var btn = document.getElementById('modalCopyBtn');
+  btn.textContent = 'Copied!';
+  setTimeout(function(){btn.textContent = 'Copy Prompt';}, 1500);
+});
+
+function fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch(e){}
+  document.body.removeChild(ta);
+}
+
+function addPrompt() {
+  var title = document.getElementById('newPromptTitle').value.trim();
+  var tag = document.getElementById('newPromptTag').value;
+  if(!title) { alert('Enter a prompt title.'); return; }
+  var id = Date.now();
+  prompts.push({id:id, tag:tag, title:title, desc:'Custom prompt — click to view.', date:new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}), body:'Paste your prompt content here...'});
+  document.getElementById('newPromptTitle').value = '';
+  renderPrompts();
+}
+
+function focusUpgrade(name) {
+  currentGuide = name;
+  document.getElementById('upgradeLabel').textContent = 'Selected: ' + name;
+  document.getElementById('guideText').placeholder = 'Paste the text content of "' + name + '" here...';
+  document.getElementById('guideText').focus();
+  document.getElementById('guideText').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function handleUpgrade() {
+  var text = document.getElementById('guideText').value.trim();
+  if(!text) { alert('Paste the guide text first.'); return; }
+  var msg = 'Please upgrade this WBN training guide into an interactive, well-structured module with clear sections, rules, examples, and a checklist. Follow WBN editorial standards throughout.\n\nGuide name: ' + (currentGuide || 'WBN Training Guide') + '\n\nGuide content:\n\n' + text;
+  if(window.sendPrompt) {
+    window.sendPrompt(msg);
+  } else {
+    fallbackCopy(msg);
+    alert('Prompt copied to clipboard — paste it into Claude to upgrade this guide.');
+  }
+}
+
+function esc(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function updateClock() {
+  var now = new Date();
+  var utc = pad(now.getUTCHours()) + ':' + pad(now.getUTCMinutes()) + ':' + pad(now.getUTCSeconds()) + ' UTC';
+  var el = document.getElementById('hqClock');
+  if(el) el.textContent = utc;
+  var pst = now.toLocaleTimeString('en-US',{timeZone:'America/Vancouver',hour:'2-digit',minute:'2-digit'});
+  var fv = document.getElementById('footerVer');
+  if(fv) fv.textContent = 'WBN HQ v1.0 · ' + pst + ' PST';
+}
+
+function pad(n) { return String(n).padStart(2,'0'); }
+
+window.showPanel = showPanel;
+window.addPrompt = addPrompt;
+window.focusUpgrade = focusUpgrade;
+window.handleUpgrade = handleUpgrade;
+
+renderPrompts();
+setInterval(updateClock, 1000);
+updateClock();
+})();
+</script>
+</body>
+</html>
